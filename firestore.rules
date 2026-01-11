@@ -1,0 +1,145 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for authentication and authorization
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidTimestamp(value) {
+      return value is timestamp;
+    }
+    
+    function isValidEmail(email) {
+      return email is string && email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    // Users collection rules
+    match /users/{userId} {
+      // Anyone authenticated can read user profiles
+      allow read: if isAuthenticated();
+      
+      // Users can only create/update their own profile
+      allow create: if isOwner(userId) 
+                    && request.resource.data.uid == userId
+                    && request.resource.data.email is string
+                    && request.resource.data.displayName is string
+                    && isValidTimestamp(request.resource.data.createdAt)
+                    && isValidTimestamp(request.resource.data.updatedAt);
+      
+      allow update: if isOwner(userId)
+                    && request.resource.data.uid == resource.data.uid // Cannot change uid
+                    && request.resource.data.email == resource.data.email // Cannot change email
+                    && isValidTimestamp(request.resource.data.updatedAt);
+      
+      // Users cannot delete their own profile (admin only through backend)
+      allow delete: if false;
+      
+      // Notification settings subcollection
+      match /notificationSettings/{settingId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Complaints collection rules
+    match /complaints/{complaintId} {
+      // Anyone authenticated can read complaints
+      allow read: if isAuthenticated();
+      
+      // Anyone authenticated can create a complaint
+      allow create: if isAuthenticated()
+                    && request.resource.data.userId is string
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() >= 5
+                    && request.resource.data.title.size() <= 200
+                    && request.resource.data.description is string
+                    && request.resource.data.description.size() >= 10
+                    && request.resource.data.category is string
+                    && request.resource.data.status == 'PENDING REVIEW'
+                    && request.resource.data.location is string
+                    && request.resource.data.coordinates.latitude is number
+                    && request.resource.data.coordinates.longitude is number
+                    && request.resource.data.votes == 0
+                    && request.resource.data.votedBy is list
+                    && request.resource.data.views == 0
+                    && request.resource.data.viewedBy is list
+                    && request.resource.data.priorityScore in ['Low', 'Medium', 'High', 'Critical']
+                    && isValidTimestamp(request.resource.data.createdAt)
+                    && isValidTimestamp(request.resource.data.updatedAt);
+      
+      // Owners can update their own complaints (title, description)
+      // Backend can update status, votes, views, priority
+      allow update: if isAuthenticated() && (
+        // Owner can update basic fields
+        (isOwner(resource.data.userId) 
+         && request.resource.data.userId == resource.data.userId
+         && request.resource.data.status == resource.data.status
+         && request.resource.data.votes == resource.data.votes
+         && request.resource.data.views == resource.data.views)
+        // Anyone can increment votes/views (backend validates)
+        || (request.resource.data.votes >= resource.data.votes
+           && request.resource.data.views >= resource.data.views)
+      );
+      
+      // Owners can delete their own complaints only if status is PENDING REVIEW or REJECTED
+      allow delete: if isOwner(resource.data.userId) 
+                    && resource.data.status in ['PENDING REVIEW', 'REJECTED'];
+      
+      // Insight requests subcollection
+      match /insightRequests/{requestId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated()
+                      && request.resource.data.userId == request.auth.uid
+                      && request.resource.data.message is string
+                      && request.resource.data.message.size() >= 5
+                      && isValidTimestamp(request.resource.data.createdAt);
+        allow update: if isAuthenticated();
+        allow delete: if isOwner(resource.data.userId);
+      }
+    }
+    
+    // Notifications collection rules
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() 
+                  && resource.data.userId == request.auth.uid;
+      
+      // Backend creates notifications (users cannot create directly)
+      allow create: if isAuthenticated()
+                    && request.resource.data.userId is string
+                    && request.resource.data.type in ['COMPLAINT_UPDATE', 'NEW_VOTE', 'INSIGHT_REQUEST', 'INSIGHT_REPLY', 'STATUS_CHANGE', 'WEEKLY_DIGEST']
+                    && request.resource.data.title is string
+                    && request.resource.data.message is string
+                    && request.resource.data.isRead == false
+                    && isValidTimestamp(request.resource.data.createdAt);
+      
+      // Users can update only to mark as read
+      allow update: if isOwner(resource.data.userId)
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.type == resource.data.type
+                    && request.resource.data.title == resource.data.title
+                    && request.resource.data.message == resource.data.message
+                    && request.resource.data.createdAt == resource.data.createdAt;
+      
+      // Users can delete their own notifications
+      allow delete: if isOwner(resource.data.userId);
+    }
+    
+    // Analytics collection (read-only for users, write from backend)
+    match /analytics/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only backend can write
+    }
+    
+    // Admin collection (backend only)
+    match /admin/{document=**} {
+      allow read, write: if false; // Only backend can access
+    }
+  }
+}

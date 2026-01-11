@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check file size (max 5MB for images)
+    function isValidImageSize() {
+      return request.resource.size <= 5 * 1024 * 1024;
+    }
+    
+    // Helper function to check file type
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    // Profile images
+    match /profiles/{userId}/{fileName} {
+      // Users can read any profile image
+      allow read: if true;
+      
+      // Users can only upload to their own profile folder
+      allow write: if isAuthenticated() 
+                   && request.auth.uid == userId
+                   && isValidImageSize()
+                   && isValidImageType();
+      
+      // Users can delete their own profile images
+      allow delete: if isAuthenticated() 
+                    && request.auth.uid == userId;
+    }
+    
+    // Complaint images
+    match /complaints/{complaintId}/{fileName} {
+      // Anyone can read complaint images
+      allow read: if true;
+      
+      // Authenticated users can upload complaint images
+      allow write: if isAuthenticated()
+                   && isValidImageSize()
+                   && isValidImageType();
+      
+      // Only authenticated users can delete complaint images
+      allow delete: if isAuthenticated();
+    }
+    
+    // Deny access to all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
