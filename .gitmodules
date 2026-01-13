@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/End-side-Developer/civic-pressure-frontend
+[submodule "backend"]
+	path = backend
+	url = https://github.com/End-side-Developer/civic-pressure-backend
