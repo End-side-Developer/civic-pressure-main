@@ -11,7 +11,7 @@ A modern web platform that empowers citizens to report and track civic issues in
 - 📝 **Report Civic Issues** - Easy-to-use complaint submission with location mapping
 - 🤖 **AI-Powered Duplicate Detection** - Automatically identifies similar complaints using semantic embeddings
 - ✨ **AI Description Enhancement** - Improves complaint descriptions using Google Gemini AI
-- 🗺️ **Interactive Maps** - Visualize complaint locations using Google Maps and Leaflet
+- 🗺️ **Interactive Maps** - Visualize complaint locations using Google Maps
 - 👍 **Community Voting** - Vote on complaints to increase their priority
 - 🔔 **Real-time Notifications** - Stay updated on complaint status changes
 - 📊 **User Dashboard** - Track your complaints and community engagement
@@ -25,7 +25,7 @@ A modern web platform that empowers citizens to report and track civic issues in
 ┌─────────────────────────────────────────────────────────────┐
 │                        Frontend (React)                      │
 │  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐  │
-│  │   React    │  │  Firebase  │  │  Leaflet/Google Maps │  │
+│  │   React    │  │  Firebase  │  │  Google Maps         │  │
 │  │ TypeScript │  │    Auth    │  │                      │  │
 │  │  Tailwind  │  │  Firestore │  │                      │  │
 │  └────────────┘  └────────────┘  └──────────────────────┘  │
@@ -59,7 +59,7 @@ A modern web platform that empowers citizens to report and track civic issues in
 - **Firebase SDK** - Authentication and Firestore client
 - **React Router v7** - Client-side routing
 - **Axios** - HTTP client
-- **Leaflet & @react-google-maps/api** - Interactive mapping
+- **@react-google-maps/api** - Interactive mapping
 - **Lucide React** - Icon library
 
 ### Backend

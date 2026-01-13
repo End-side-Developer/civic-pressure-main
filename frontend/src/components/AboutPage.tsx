@@ -302,7 +302,7 @@ const AboutPage: React.FC = () => {
                 
                 {/* GitHub Button */}
                 <a
-                  href="https://github.com/yourusername/civic-pressure"
+                  href="https://github.com/End-side-Developer/civic-pressure-main"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 xs:gap-3 px-4 xs:px-6 py-3 xs:py-3.5 bg-gray-900 dark:bg-gray-700 text-white rounded-xl font-semibold text-sm xs:text-base hover:bg-gray-800 dark:hover:bg-gray-600 transition shadow-lg hover:shadow-xl active:scale-95 min-h-[44px]"
