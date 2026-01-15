@@ -25,7 +25,7 @@ A modern web platform that empowers citizens to report and track civic issues in
 ┌─────────────────────────────────────────────────────────────┐
 │                        Frontend (React)                     │
 │  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐   │
-│  │   React    │  │  Firebase  │  │  Google Maps         │   │
+│  │   React    │  │  Firebase  │  │     Google Maps      │   │
 │  │ TypeScript │  │    Auth    │  │                      │   │
 │  │  Tailwind  │  │  Firestore │  │                      │   │
 │  └────────────┘  └────────────┘  └──────────────────────┘   │
