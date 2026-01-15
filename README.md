@@ -23,31 +23,31 @@ A modern web platform that empowers citizens to report and track civic issues in
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Frontend (React)                      │
-│  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐  │
-│  │   React    │  │  Firebase  │  │  Google Maps         │  │
-│  │ TypeScript │  │    Auth    │  │                      │  │
-│  │  Tailwind  │  │  Firestore │  │                      │  │
-│  └────────────┘  └────────────┘  └──────────────────────┘  │
+│                        Frontend (React)                     │
+│  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐   │
+│  │   React    │  │  Firebase  │  │  Google Maps         │   │
+│  │ TypeScript │  │    Auth    │  │                      │   │
+│  │  Tailwind  │  │  Firestore │  │                      │   │
+│  └────────────┘  └────────────┘  └──────────────────────┘   │
 └─────────────────────────┬───────────────────────────────────┘
                           │ REST API (Axios)
                           │
 ┌─────────────────────────▼───────────────────────────────────┐
-│                   Backend (Node.js/Express)                  │
-│  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐  │
-│  │  Express   │  │  Firebase  │  │   Google Gemini AI   │  │
-│  │ TypeScript │  │   Admin    │  │   TensorFlow.js      │  │
-│  │   Multer   │  │  Firestore │  │ Semantic Embeddings  │  │
-│  └────────────┘  └────────────┘  └──────────────────────┘  │
+│                   Backend (Node.js/Express)                 │
+│  ┌────────────┐  ┌────────────┐  ┌──────────────────────┐   │
+│  │  Express   │  │  Firebase  │  │   Google Gemini AI   │   │
+│  │ TypeScript │  │   Admin    │  │   TensorFlow.js      │   │
+│  │   Multer   │  │  Firestore │  │ Semantic Embeddings  │   │
+│  └────────────┘  └────────────┘  └──────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                           │
                           │
 ┌─────────────────────────▼───────────────────────────────────┐
-│                     Firebase Services                        │
-│  ┌─────────────┐ ┌──────────────┐ ┌──────────────────────┐ │
-│  │  Firestore  │ │   Storage    │ │   Authentication     │ │
-│  │  (Database) │ │  (Images)    │ │    (Auth)            │ │
-│  └─────────────┘ └──────────────┘ └──────────────────────┘ │
+│                     Firebase Services                       │
+│  ┌─────────────┐ ┌──────────────┐ ┌──────────────────────┐  │
+│  │  Firestore  │ │   Storage    │ │   Authentication     │  │
+│  │  (Database) │ │  (Images)    │ │    (Auth)            │  │
+│  └─────────────┘ └──────────────┘ └──────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
